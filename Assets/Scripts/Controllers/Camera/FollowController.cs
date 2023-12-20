@@ -2,17 +2,22 @@
 
 public class FollowController : MonoBehaviour
 {
-    public Transform target;
-    public Vector3 targetOffset = new Vector3(0,0,0);
-    public Vector3 positionOffset = new Vector3(0, -4.5f, 2.3f);
+    public Vector3 targetOffset = new Vector3(0, 1.5f, 0);
+    public Vector3 positionOffset = new Vector3(0, -3.2f, 0.55f);
     public float sensitivity = 2f;
     public float maxYAngle = 60f;
 
     private Vector2 currentRotation;
+    private Transform t_target;
+
+    private void Awake()
+    {
+        t_target = GameObject.FindWithTag("Player").transform;
+    }
 
     void Update()
     {
-        if (target != null)
+        if (t_target != null)
         {
             currentRotation.x += Input.GetAxis("Mouse X") * sensitivity;
             currentRotation.y -= Input.GetAxis("Mouse Y") * sensitivity;
@@ -20,8 +25,8 @@ public class FollowController : MonoBehaviour
             currentRotation.y = Mathf.Clamp(currentRotation.y, -maxYAngle, maxYAngle);
 
             var rotation = Quaternion.Euler(currentRotation.y, currentRotation.x, 0);
-            transform.position = target.position - (rotation * positionOffset);
-            transform.LookAt(target.position + targetOffset);
+            transform.position = t_target.position - (rotation * positionOffset);
+            transform.LookAt(t_target.position + targetOffset);
         }
     }
 }
